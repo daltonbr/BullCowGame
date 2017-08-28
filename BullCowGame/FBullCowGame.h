@@ -9,6 +9,8 @@
 */
 class FBullCowGame {
 public:
+	FBullCowGame(); // constructor
+	//~FBullCowGame(); // destructor
 	int GetMaxTries() const;
 	int GetCurrentTry() const;
 	bool IsGameWon() const;
@@ -18,6 +20,7 @@ public:
 	void IncrementTries();
 
 private:
-	int MyCurrentTry = 1;
-	int MyMaxTries = 5;
+	// see constructor for initialisation
+	int MyCurrentTry;
+	int MyMaxTries;
 };
