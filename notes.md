@@ -61,4 +61,11 @@ Since this is a "terminal-console" game all the inputs and outputs will be in pl
 * Providing a time limit for the guesses
 * A hint system, spend a turn for a hint
 
-## How Solutions & Projects relate
+## Types in Unreal
+
+IN Unreal we use
+
+'''CSharp
+using FText = std::string;  // when 
+using FString = std::string;
+'''
