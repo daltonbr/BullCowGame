@@ -27,23 +27,55 @@ bool FBullCowGame::IsGameWon() const
 	return false;
 }
 
-bool FBullCowGame::CheckGuessValidity(FString)
+bool FBullCowGame::CheckGuessValidity(FString Guess)
 {
-	return false;
+	// At first we just check if the lengths are the same
+	if (Guess.length() != MyHiddenWord.length())
+	{
+		return false;
+	}
+	return true;
 }
 
 // receives a VALID guess, increments turn, and returns count
-BullCowCount FBullCowGame::SubmitGuess(FString)
+FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
 {
+	if (!CheckGuessValidity(Guess))
+	{
+		std::cout << "Guess Invalid\n";
+	}
+	
 	// increment the turn number
 	MyCurrentTry++;
 
 	// setup a return variable
-	BullCowCount BullCowCount;
+	FBullCowCount BullCowCount;
+
 	// loop through all letters in the guess
+	int32 HiddenWordLength = MyHiddenWord.length();
+	for (int32 HiddenChar = 0; HiddenChar < HiddenWordLength; HiddenChar++)
+	{
 		// compare letters against the hidden word
+		for (int32 GuessChar = 0; GuessChar < HiddenWordLength; GuessChar++)
+		{
+			// if they match then
+			if (Guess[GuessChar] == MyHiddenWord[HiddenChar])
+			{
+				if (HiddenChar == GuessChar)
+				{
+					// increment bulls if they're in the same place
+					BullCowCount.Bulls++;
+				}
+				else
+				{
+					BullCowCount.Cows++;
+				}
+			}
+		}
+	}
 	return BullCowCount;
 }
+
 
 void FBullCowGame::IncrementTries()
 {

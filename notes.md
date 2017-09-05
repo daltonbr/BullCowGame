@@ -66,6 +66,7 @@ Since this is a "terminal-console" game all the inputs and outputs will be in pl
 IN Unreal we use
 
 '''CSharp
-using FText = std::string;  // when 
+using FText = std::string;  // user interaction
 using FString = std::string;
+using int32 = int;
 '''
