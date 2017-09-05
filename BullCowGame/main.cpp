@@ -35,10 +35,9 @@ int main()
 // introduce the game
 void PrintIntro()
 {
-	// TODO WORD_LENGTH must get its value dynamically
-	constexpr int32 WORD_LENGTH = 6;
 	std::cout << "Welcome to Bulls and Cows, a fun word game.\n";
-	std::cout << "Can you guess the " << WORD_LENGTH << " letter isogram I'm thinking of?\n";
+	std::cout << "Can you guess the " << BCGame.GetHiddenWordLength();
+	std::cout << " letter isogram I'm thinking of?\n";
 	std::cout << std::endl;
 	return;
 }

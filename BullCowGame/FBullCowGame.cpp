@@ -7,43 +7,39 @@ FBullCowGame::FBullCowGame() { Reset(); }
 
 int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
+int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 
 void FBullCowGame::Reset()
 {
 	constexpr int32 MAX_TRIES = 8;
-
-	std::cout << "Reseting game\n";
+	const FString HIDDEN_WORD = "plan";
+	
+	//std::cout << "Reseting game\n";
 	MyMaxTries = MAX_TRIES;
-
-	const FString HIDDEN_WORD = "planet";
 	MyHiddenWord = HIDDEN_WORD;
-
 	MyCurrentTry = 1;
 	return;
 }
+
 
 bool FBullCowGame::IsGameWon() const
 {
 	return false;
 }
 
-bool FBullCowGame::CheckGuessValidity(FString Guess)
+bool FBullCowGame::CheckGuessValidity(FString Guess) const
 {
 	// At first we just check if the lengths are the same
-	if (Guess.length() != MyHiddenWord.length())
-	{
-		return false;
-	}
-	return true;
+	return (Guess.length() == GetHiddenWordLength());
 }
 
 // receives a VALID guess, increments turn, and returns count
 FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
 {
-	if (!CheckGuessValidity(Guess))
+	/*if (!CheckGuessValidity(Guess))
 	{
 		std::cout << "Guess Invalid\n";
-	}
+	}*/
 	
 	// increment the turn number
 	MyCurrentTry++;
