@@ -11,12 +11,15 @@ struct FBullCowCount
 	int32 Cows = 0;
 };
 
-enum EWordStatus
+// strongly typed enum c++11 (Unreal Coding Standards)
+enum class EGuessStatus
 {
+	Invalid_Status,
 	OK,
 	Not_Isogram,
-	Lesser,
-	Greater
+	Wrong_Length,
+	Not_Lowercase,
+	Has_Numbers
 };
 
 class FBullCowGame {
@@ -29,7 +32,7 @@ public:
 	int32 GetHiddenWordLength() const;
 
 	bool IsGameWon() const;
-	bool CheckGuessValidity(FString) const;   // TODO make a more rich return value.
+	EGuessStatus CheckGuessValidity(FString) const;   // TODO make a more rich return value.
 
 	void Reset();  // TODO make a more rich return value.	
 	FBullCowCount SubmitGuess(FString);
