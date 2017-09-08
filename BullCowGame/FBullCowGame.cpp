@@ -8,6 +8,7 @@ FBullCowGame::FBullCowGame() { Reset(); }
 int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
+bool FBullCowGame::IsGameWon() const { return bIsGameWon; }
 
 void FBullCowGame::Reset()
 {
@@ -18,14 +19,10 @@ void FBullCowGame::Reset()
 	MyMaxTries = MAX_TRIES;
 	MyHiddenWord = HIDDEN_WORD;
 	MyCurrentTry = 1;
+	bIsGameWon = false;
 	return;
 }
 
-
-bool FBullCowGame::IsGameWon() const
-{
-	return false;
-}
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 {
@@ -53,25 +50,17 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 }
 
 // receives a VALID guess, increments turn, and returns count
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
+FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 {
-	/*if (!CheckGuessValidity(Guess))
-	{
-		std::cout << "Guess Invalid\n";
-	}*/
-	
-	// increment the turn number
-	MyCurrentTry++;
-
-	// setup a return variable
+	MyCurrentTry++;	
 	FBullCowCount BullCowCount;
+	int32 WordLength = MyHiddenWord.length(); // assuming same length as guess
 
-	// loop through all letters in the guess
-	int32 HiddenWordLength = MyHiddenWord.length();
-	for (int32 HiddenChar = 0; HiddenChar < HiddenWordLength; HiddenChar++)
+	// loop through all letters in the hidden word
+	for (int32 HiddenChar = 0; HiddenChar < WordLength; HiddenChar++)
 	{
-		// compare letters against the hidden word
-		for (int32 GuessChar = 0; GuessChar < HiddenWordLength; GuessChar++)
+		// compare letters against the guess
+		for (int32 GuessChar = 0; GuessChar < WordLength; GuessChar++)
 		{
 			// if they match then
 			if (Guess[GuessChar] == MyHiddenWord[HiddenChar])
@@ -88,12 +77,6 @@ FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
 			}
 		}
 	}
+	bIsGameWon = BullCowCount.Bulls == WordLength;
 	return BullCowCount;
 }
-
-
-void FBullCowGame::IncrementTries()
-{
-	MyCurrentTry++;
-}
-
