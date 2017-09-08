@@ -31,10 +31,11 @@ public:
 	int32 GetCurrentTry() const;
 	int32 GetHiddenWordLength() const;
 	bool IsGameWon() const;
-	EGuessStatus CheckGuessValidity(FString) const;   // TODO make a more rich return value.
+	EGuessStatus CheckGuessValidity(FString) const;
 
 	void Reset();  // TODO make a more rich return value.	
 	FBullCowCount SubmitValidGuess(FString);
+
 
 private:
 	// see constructor for initialization
@@ -42,4 +43,6 @@ private:
 	int32 MyMaxTries;
 	FString MyHiddenWord;
 	bool bIsGameWon;
+
+	bool IsIsogram(FString) const;
 };

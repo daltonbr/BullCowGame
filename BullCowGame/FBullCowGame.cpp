@@ -1,7 +1,7 @@
 #pragma once
 #include "FBullCowGame.h"
-#include <iostream>
-
+#include <map>
+#define Tmap std::map
 
 FBullCowGame::FBullCowGame() { Reset(); }
 
@@ -12,7 +12,7 @@ bool FBullCowGame::IsGameWon() const { return bIsGameWon; }
 
 void FBullCowGame::Reset()
 {
-	constexpr int32 MAX_TRIES = 8;
+	constexpr int32 MAX_TRIES = 3;
 	const FString HIDDEN_WORD = "plan";
 	
 	//std::cout << "Reseting game\n";
@@ -26,14 +26,13 @@ void FBullCowGame::Reset()
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 {
-	// not an isogram
-	if (false)
+	if (!IsIsogram(Guess)) // not an isogram
 	{
 		return EGuessStatus::Not_Isogram;
 	} 
 	else if (false) // not all lowercase
 	{
-		return EGuessStatus::Not_Lowercase;
+		return EGuessStatus::Not_Lowercase; // TODO write function
 	} 
 	else if (Guess.length() != GetHiddenWordLength()) // length is wrong
 	{
@@ -43,10 +42,6 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 	{
 		return EGuessStatus::OK;
 	}
-
-	// otherwise
-		// OK
-		return EGuessStatus::OK; // TODO make actual error
 }
 
 // receives a VALID guess, increments turn, and returns count
@@ -79,4 +74,21 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 	}
 	bIsGameWon = BullCowCount.Bulls == WordLength;
 	return BullCowCount;
+}
+
+// TODO implement IsIsogram
+bool FBullCowGame::IsIsogram(FString Word) const
+{
+	// treat 0 and 1 letter words as isograms
+
+	// declare a Tmap variable
+	//Tmap <char, bool> 
+
+	// loop through all the word letters
+		// if the current letter is in the map
+			// we do NOT have an isogram
+		// else
+			// add the letter tp the map
+
+	return true; // for example in cases where /0 is entered
 }

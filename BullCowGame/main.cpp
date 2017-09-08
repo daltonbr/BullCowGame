@@ -16,6 +16,7 @@ void PrintIntro();
 void PlayGame();
 FText GetValidGuess();
 bool AskToPlayAgain();
+void PrintGameSummary();
 
 FBullCowGame BCGame;	// our game instance
 
@@ -47,12 +48,10 @@ void PlayGame()
 {
 	BCGame.Reset();
 	int32 MaxTries = BCGame.GetMaxTries();
-	std::cout << MaxTries << std::endl;
 
 	// loop asking for guesses while the game
 	// is NOT and there are still tries remaining
-	constexpr int32 NUMBER_OF_TURNS = 3;
-	//for (int32 count = 0; count < MaxTries; count++) // TODO change from FOR to WHILE loop once we are validating tries
+		
 	while (!BCGame.IsGameWon() && BCGame.GetCurrentTry() <= MaxTries)
 	{
 		FText Guess = GetValidGuess();
@@ -64,7 +63,9 @@ void PlayGame()
 		std::cout << " Cows = " << BullCowCount.Cows << "\n\n";
 	}
 
-	// TODO summarize summary
+	PrintGameSummary();
+
+	return;
 }
 
 // loop continually until the user gives a valid guess
@@ -107,9 +108,21 @@ FText GetValidGuess()
 
 bool AskToPlayAgain()
 {
-	std::cout << "Do you want to play again? [Y/N] ";
+	std::cout << "Do you want to play again with the same hidden word? [y/n] ";
 	FText Response = "";
 	std::getline(std::cin, Response);
 	
 	return (Response[0] == 'y' || Response[0] == 'Y');	
+}
+
+void PrintGameSummary()
+{
+	if (BCGame.IsGameWon())
+	{
+		std::cout << "WELL DONE! YOU WIN!\n";
+	}
+	else
+	{
+		std::cout << "BETTER LUCK NEXT TIME!\n";
+	}
 }
