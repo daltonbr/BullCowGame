@@ -45,8 +45,8 @@ void PrintIntro()
 	std::cout << "     |        | (oo)          (oo)   |      |" << std::endl;
 	std::cout << std::endl;
 
-	std::cout << "Can you guess the " << BCGame.GetHiddenWordLength();
-	std::cout << " letter isogram I'm thinking of?\n";
+	std::cout << "Can you guess the \"" << BCGame.GetHiddenWordLength();
+	std::cout << "\" letter isogram I'm thinking of?\n";
 	std::cout << std::endl;
 	return;
 }
@@ -84,15 +84,15 @@ FText GetValidGuess()
 	{
 		// get a guess from the player
 		int32 CurrentTry = BCGame.GetCurrentTry();
-		std::cout << "Try " << CurrentTry << " of " << BCGame.GetMaxTries();
-		std::cout << ". Enter your guess: ";
+		std::cout << "[Try " << CurrentTry << "/" << BCGame.GetMaxTries();
+		std::cout << "]. Enter your guess: ";
 		std::getline(std::cin, Guess);
 
 		Status = BCGame.CheckGuessValidity(Guess);
 		switch (Status)
 		{
 		case EGuessStatus::Wrong_Length:
-			std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << " length word.\n\n";
+			std::cout << "Please enter a \"" << BCGame.GetHiddenWordLength() << "\" length word.\n\n";
 			break;
 		case EGuessStatus::Not_Lowercase:
 			std::cout << "Please enter only lowercases.\n\n";

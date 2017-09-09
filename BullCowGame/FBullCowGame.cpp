@@ -3,22 +3,25 @@
 #include <map>
 #include <cctype>
 #include <locale>
-#define Tmap std::map
+#define TMap std::map
 
 FBullCowGame::FBullCowGame() { Reset(); } // default contructor
 
-int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 bool FBullCowGame::IsGameWon() const { return bIsGameWon; }
 
+int32 FBullCowGame::GetMaxTries() const
+{
+	TMap<int32, int32> WordLengthToMaxTries { {3,5}, {4,6}, {5,7}, {6,8}, {7,9} };
+	return WordLengthToMaxTries[MyHiddenWord.length()];
+}
+
 void FBullCowGame::Reset()
 {
-	constexpr int32 MAX_TRIES = 3;
 	const FString HIDDEN_WORD = "plan";
-	
-	MyMaxTries = MAX_TRIES;
 	MyHiddenWord = HIDDEN_WORD;
+
 	MyCurrentTry = 1;
 	bIsGameWon = false;
 	return;
@@ -86,7 +89,7 @@ bool FBullCowGame::IsIsogram(FString Word) const
 	// treat 0 and 1 letter words as isograms
 	if (Word.length() <= 1) { return true; }
 
-	Tmap<char, bool> LetterSeen;
+	TMap<char, bool> LetterSeen;
 
 	// loop through all the word letters
 	for (auto Letter : Word)
