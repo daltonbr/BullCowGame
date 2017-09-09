@@ -1,24 +1,26 @@
-/* This is the console executable, that makes use of the BullCow class
+/* This is the console executable, that makes use of the FBullCowGame class
 This acts as the view in a MVC pattern, and is responsible for all
 user interaction. For game logic see the FBullCowGame class.
 */
 
 #pragma once
+
 #include <iostream>
 #include <string>
 #include "FBullCowGame.h"
 
+// complying with Unreal Coding Standards
 using FText = std::string;
 using int32 = int;
 
-
+// function prototypes as outside a class
 void PrintIntro();
 void PlayGame();
 FText GetValidGuess();
 bool AskToPlayAgain();
 void PrintGameSummary();
 
-FBullCowGame BCGame;	// our game instance
+FBullCowGame BCGame;	// instantiate a new game, which we re-use across plays
 
 // the entry point for our application
 int main()
@@ -26,13 +28,15 @@ int main()
 	do
 	{
 		PrintIntro();
+		// TODO create a Campaign Mode: with crescent difficulty
+		// TODO Difficulty Selection (based on word length 3~7)
 		PlayGame();
 	} while (AskToPlayAgain());
 	
     return 0;
 }
 
-// introduce the game
+
 void PrintIntro()
 {
 	std::cout << "\n  ___________________________    __________________ \n";
@@ -47,18 +51,19 @@ void PrintIntro()
 
 	std::cout << "Can you guess the \"" << BCGame.GetHiddenWordLength();
 	std::cout << "\" letter isogram I'm thinking of?\n";
+	std::cout << "(Isogram is a word with NO repeating letters) \n";
 	std::cout << std::endl;
 	return;
 }
 
+// main game loop - plays a single game to completion
 void PlayGame()
 {
 	BCGame.Reset();
 	int32 MaxTries = BCGame.GetMaxTries();
 
-	// loop asking for guesses while the game
-	// is NOT and there are still tries remaining
-		
+	/* loop asking for guesses while the game
+	   is NOT WON and there are still tries remaining */
 	while (!BCGame.IsGameWon() && BCGame.GetCurrentTry() <= MaxTries)
 	{
 		FText Guess = GetValidGuess();

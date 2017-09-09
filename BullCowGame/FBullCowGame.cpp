@@ -1,9 +1,11 @@
 #pragma once
+
 #include "FBullCowGame.h"
-#include <map>
 #include <cctype>
-#include <locale>
-#define TMap std::map
+#include <map>
+
+#define TMap std::map // complying with Unreal Coding Standards
+using int32 = int;
 
 FBullCowGame::FBullCowGame() { Reset(); } // default contructor
 
@@ -13,13 +15,13 @@ bool FBullCowGame::IsGameWon() const { return bIsGameWon; }
 
 int32 FBullCowGame::GetMaxTries() const
 {
-	TMap<int32, int32> WordLengthToMaxTries { {3,5}, {4,6}, {5,7}, {6,8}, {7,9} };
+	TMap<int32, int32> WordLengthToMaxTries { {3,4}, {4,7}, {5,10}, {6,15}, {7,20} };
 	return WordLengthToMaxTries[MyHiddenWord.length()];
 }
 
 void FBullCowGame::Reset()
 {
-	const FString HIDDEN_WORD = "plan";
+	const FString HIDDEN_WORD = "plane"; // this MUST be an isogram
 	MyHiddenWord = HIDDEN_WORD;
 
 	MyCurrentTry = 1;
@@ -112,12 +114,12 @@ bool FBullCowGame::IsIsogram(FString Word) const
 
 bool FBullCowGame::IsLowercase(FString Word) const
 {
-	// handle strings of zero length, '\0' and spaces
-	if (Word.length() == 0) { return true; } // TODO think about this!
+	// handle strings of zero length, '\0'
+	if (Word.length() == 0) { return true; }
 
 	for(auto Letter : Word)
 	{
-		if (islower(Letter) == false) // TODO Digits are no lower! 
+		if (islower(Letter) == false)
 		{
 			return false;
 		}
@@ -127,8 +129,8 @@ bool FBullCowGame::IsLowercase(FString Word) const
 
 bool FBullCowGame::IsAlpha(FString Word) const
 {
-	// handle strings of zero length, '\0' and spaces
-	if (Word.length() == 0) { return true; } // TODO think about this!
+	// handle strings of zero length, '\0'
+	if (Word.length() == 0) { return true; }
 
 	for (auto Letter : Word)
 	{

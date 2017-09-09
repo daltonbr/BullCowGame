@@ -1,10 +1,15 @@
+/* The game logic (no view code or direct user interaction)
+ * The game is a simple guess the word game based on Mastermind
+ */
+
 #pragma once
 #include <string>
 
+ // complying with Unreal Coding Standards
 using FString = std::string;
 using int32 = int;
 
-// all values initialized to zero
+// feedback to user in a single struct
 struct FBullCowCount
 {
 	int32 Bulls = 0;
@@ -22,6 +27,7 @@ enum class EGuessStatus
 	Not_Alpha
 };
 
+/* Base class for the game Bulls and Cows */
 class FBullCowGame {
 public:
 	FBullCowGame(); // constructor
@@ -33,7 +39,7 @@ public:
 	bool IsGameWon() const;
 	EGuessStatus CheckGuessValidity(FString) const;
 
-	void Reset();  // TODO make a more rich return value.	
+	void Reset();
 	FBullCowCount SubmitValidGuess(FString);
 
 
