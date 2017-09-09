@@ -19,7 +19,7 @@ enum class EGuessStatus
 	Not_Isogram,
 	Wrong_Length,
 	Not_Lowercase,
-	Has_Numbers
+	Not_Alpha
 };
 
 class FBullCowGame {
@@ -45,4 +45,6 @@ private:
 	bool bIsGameWon;
 
 	bool IsIsogram(FString) const;
+	bool IsLowercase(FString) const;
+	bool IsAlpha(FString) const;
 };

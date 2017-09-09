@@ -1,9 +1,11 @@
 #pragma once
 #include "FBullCowGame.h"
 #include <map>
+#include <cctype>
+#include <locale>
 #define Tmap std::map
 
-FBullCowGame::FBullCowGame() { Reset(); }
+FBullCowGame::FBullCowGame() { Reset(); } // default contructor
 
 int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
@@ -15,7 +17,6 @@ void FBullCowGame::Reset()
 	constexpr int32 MAX_TRIES = 3;
 	const FString HIDDEN_WORD = "plan";
 	
-	//std::cout << "Reseting game\n";
 	MyMaxTries = MAX_TRIES;
 	MyHiddenWord = HIDDEN_WORD;
 	MyCurrentTry = 1;
@@ -30,13 +31,17 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 	{
 		return EGuessStatus::Not_Isogram;
 	} 
-	else if (false) // not all lowercase
+	else  if (!IsLowercase(Guess)) // not all lowercase
 	{
-		return EGuessStatus::Not_Lowercase; // TODO write function
+		return EGuessStatus::Not_Lowercase;
 	} 
 	else if (Guess.length() != GetHiddenWordLength()) // length is wrong
 	{
 		return EGuessStatus::Wrong_Length;
+	}
+	else if (!IsAlpha(Guess))
+	{
+		return EGuessStatus::Not_Alpha;
 	}
 	else
 	{
@@ -76,7 +81,6 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 	return BullCowCount;
 }
 
-// TODO implement IsIsogram
 bool FBullCowGame::IsIsogram(FString Word) const
 {
 	// treat 0 and 1 letter words as isograms
@@ -102,3 +106,34 @@ bool FBullCowGame::IsIsogram(FString Word) const
 	}
 	return true; // for example in cases where /0 is entered
 }
+
+bool FBullCowGame::IsLowercase(FString Word) const
+{
+	// handle strings of zero length, '\0' and spaces
+	if (Word.length() == 0) { return true; } // TODO think about this!
+
+	for(auto Letter : Word)
+	{
+		if (islower(Letter) == false) // TODO Digits are no lower! 
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool FBullCowGame::IsAlpha(FString Word) const
+{
+	// handle strings of zero length, '\0' and spaces
+	if (Word.length() == 0) { return true; } // TODO think about this!
+
+	for (auto Letter : Word)
+	{
+		if (isalpha(Letter) == false)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+

@@ -32,17 +32,24 @@ int main()
     return 0;
 }
 
-
 // introduce the game
 void PrintIntro()
 {
-	std::cout << "\n\nWelcome to Bulls and Cows, a fun word game.\n";
+	std::cout << "\n  ___________________________    __________________ \n";
+	std::cout << "\n |Welcome to Bulls and Cows! |  | A fun word game! |\n";
+	std::cout << "\n |_____________\\ ____________|  |/_________________|\n";
+	std::cout << "\n                \\               /               \n";
+	std::cout << "      _________}____{        |____|__________" << std::endl;
+	std::cout << "     /|        |O  o|        | oO | o  O o O|\\"<< std::endl;
+	std::cout << "    *|\\_______/(    )        (    )__O__o_o_| *" << std::endl;
+	std::cout << "     |        | (oo)          (oo)   |      |" << std::endl;
+	std::cout << std::endl;
+
 	std::cout << "Can you guess the " << BCGame.GetHiddenWordLength();
 	std::cout << " letter isogram I'm thinking of?\n";
 	std::cout << std::endl;
 	return;
 }
-
 
 void PlayGame()
 {
@@ -77,30 +84,29 @@ FText GetValidGuess()
 	{
 		// get a guess from the player
 		int32 CurrentTry = BCGame.GetCurrentTry();
-		std::cout << "Try " << CurrentTry << ". Enter your guess: ";
+		std::cout << "Try " << CurrentTry << " of " << BCGame.GetMaxTries();
+		std::cout << ". Enter your guess: ";
 		std::getline(std::cin, Guess);
-		//BCGame.IncrementTries();
 
 		Status = BCGame.CheckGuessValidity(Guess);
 		switch (Status)
 		{
 		case EGuessStatus::Wrong_Length:
-			std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << " length word.\n";
+			std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << " length word.\n\n";
 			break;
 		case EGuessStatus::Not_Lowercase:
-			std::cout << "Please enter only lowercases.\n";
+			std::cout << "Please enter only lowercases.\n\n";
 			break;
-		case EGuessStatus::Has_Numbers:
-			std::cout << "Please enter only letters [a-z].\n";
+		case EGuessStatus::Not_Alpha:
+			std::cout << "Please enter only letters [a-z].\n\n";
 			break;
 		case EGuessStatus::Not_Isogram:
-			std::cout << "Your entry was not an isogram. A isogram is a word that don't have repeated letters.\n";
+			std::cout << "Your entry was NOT an isogram. It must be a word with NO repeating letters.\n\n";
 			break;
 		default:
 			// assume that there is no error
 			break;
 		}
-		std::cout << std::endl;
 	} while (Status != EGuessStatus::OK);
 
 	return Guess;
