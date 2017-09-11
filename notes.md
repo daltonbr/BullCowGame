@@ -2,7 +2,7 @@
 
 * How much planning should we do?
 * Define the emotional **problem** the game solves*
-* Chose concept, rules & **requirements**
+* Choose concept, rules & **requirements**
 * Start to think about the architecture
 * Copy as much as possible into the code
 * Document now what may change later
