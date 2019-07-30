@@ -7,7 +7,7 @@
 * Copy as much as possible into the code
 * Document now what may change later
 
-*McConnell, Steve. Code Comlete. Microsoft Press 2004. Chapter 3.3
+*McConnell, Steve. Code Complete. Microsoft Press 2004. Chapter 3.3
 
 ## The Problem
 
@@ -23,8 +23,8 @@
 * An isogram is a word with no repeating letters
 * The user has a limited number of guesses.
 * After each guess the computer outpurs...
-    * Bull = right letter in the right place
-    * Cow = right letter in the wrong place
+  * Bull = right letter in the right place
+  * Cow = right letter in the wrong place
 * You win by guessing the word within max tries
 
 ## Write up the requirements
@@ -41,8 +41,8 @@
 * output: "cow" or "bull" or a "complete miss"
 Since this is a "terminal-console" game all the inputs and outputs will be in plain text via keyboard
 * Assets:
-    * some ASCII art for the "Main Menu"
-    * maybe some texts for the formatted questions, answers and general messages
+  * some ASCII art for the "Main Menu"
+  * maybe some texts for the formatted questions, answers and general messages
 * No perfomance limitations here, since this is a console game
 
 ### Requirements (teacher's version)
@@ -65,8 +65,8 @@ Since this is a "terminal-console" game all the inputs and outputs will be in pl
 
 IN Unreal we use
 
-'''CSharp
+```cSharp
 using FText = std::string;  // user interaction
 using FString = std::string;
 using int32 = int;
-'''
+```
