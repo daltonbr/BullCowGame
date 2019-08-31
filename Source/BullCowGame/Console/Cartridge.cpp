@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Cartridge.h"
 #include "Terminal.h"
 #include "GameFramework/Actor.h"

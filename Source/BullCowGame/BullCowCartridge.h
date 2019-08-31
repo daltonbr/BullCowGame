@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,10 +9,20 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	virtual void BeginPlay() override;
 	virtual void OnInput(const FString& Input) override;
 
-	private:
+private:
+    FString HiddenWord;
+    uint8 InitialLives;
+    uint8 CurrentLives;
+
     void PrintGreeting() const;
+    void SetupGame(const FString HiddenWord, const uint8 lives);
+    void ShowWinMessage();
+    void GameOver();
+    bool IsIsogram(const FString& Word) const;
+    bool HasCorrectLength(const FString& Word) const;
+    void InitGame();
 };
