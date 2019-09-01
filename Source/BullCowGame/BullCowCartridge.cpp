@@ -1,4 +1,6 @@
 #include "BullCowCartridge.h"
+#include <unordered_set>
+#include <algorithm>
 
 //#define DEBUG_MODE
 
@@ -15,6 +17,12 @@ void UBullCowCartridge::OnInput(const FString& Input)
     {
         ClearScreen();
         InitGame();
+        return;
+    }
+
+    if (!IsAlpha(Input))
+    {
+        PrintLine(TEXT("Enter only alphabetic characters [a-zA-Z]"));
         return;
     }
 
@@ -36,21 +44,21 @@ void UBullCowCartridge::OnInput(const FString& Input)
     }
     else
     {
-        CurrentLives--;
+        --CurrentLives;
         if (CurrentLives == 0)
         {
             //TODO: Show HiddenWord?
             EndGame(false);
             return;
         }
-        PrintLine(TEXT("Remaining lives: %i"), CurrentLives); 
+        ShowRemainingLives();
     }
 }
 
 void UBullCowCartridge::InitGame()
 {
     //TODO: change this hardcoded words
-    SetupGame(TEXT("art"), 3);
+    SetupGame(TEXT("cake"), 4);
     PrintGreeting();
 }
 
@@ -67,7 +75,7 @@ void UBullCowCartridge::PrintGreeting() const
     // This is how we interpolate strings, but PrintLine make that easy for us
     //PrintLine(FString::Printf(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len()));
     PrintLine(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len());
-    PrintLine(TEXT("Press <ENTER> to confirm your guess!"));
+    ShowRemainingLives();
 
 #ifdef DEBUG_MODE
     PrintLine(TEXT("[DEBUG] HiddenWord: %s"), *HiddenWord);
@@ -85,13 +93,52 @@ void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 lives)
 
 bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
-    //TODO: IsIsogram not implemented yet
+    const TCHAR* Chars = *Word;
+    auto UsedChars = std::unordered_set<TCHAR>();
+
+    UsedChars.insert(Chars[0]);
+
+    for (uint16 i = 1; i < Word.Len(); ++i)
+    {
+        std::unordered_set<TCHAR>::iterator it = UsedChars.find(Chars[i]);
+
+        if (UsedChars.find(Chars[i]) != UsedChars.end())
+        {
+            // Found - not an isogram - repeating letters
+            return false;
+        }
+        else
+        {
+            // not found
+            UsedChars.insert(Chars[i]);
+        }
+    }
     return true;
 }
 
 bool UBullCowCartridge::HasCorrectLength(const FString& Word) const
 {
     return Word.Len() == HiddenWord.Len();
+}
+
+// Checks if the FString is composed by only alphabetic (ANSICHAR) characters
+bool UBullCowCartridge::IsAlpha(const FString& Word) const
+{
+    const TCHAR* Chars = *Word;
+   
+    for (uint16 i = 0; i < Word.Len(); ++i)
+    {
+        if (TChar<ANSICHAR>::IsAlpha(Chars[i]))
+        {
+            //PrintLine(TEXT("is alphabetic"));
+        }
+        else
+        {
+            //PrintLine(TEXT("is not alphabetic"));
+            return false;
+        }
+    }
+    return true;
 }
 
 //TODO: we could optionally pass win or lose condition as a bool
@@ -108,4 +155,9 @@ void UBullCowCartridge::EndGame(const bool bGameWasWin)
     bGameOver = true;
     CurrentLives = 0;
     PrintLine(TEXT("Press <ENTER> to play again."));
+}
+
+void UBullCowCartridge::ShowRemainingLives() const
+{
+    PrintLine(TEXT("Remaining lives: %i"), CurrentLives);
 }
