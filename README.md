@@ -10,7 +10,7 @@ Can you find the isogram? (a word with no repeating letters)
 ## First Version
 
 ![BullCowGame](./BullCowGame00.png "Bull Cow Game old version")
-I keep the repository of the first version in this repository at: **_originalProject/BullCowGame/**
+For posterity I keep the first version here **_originalProject/BullCowGame/**
 
 The purpose of this game is to get acquainted with the C++ language, before diving into Unreal Engine!
 
