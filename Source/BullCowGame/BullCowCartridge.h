@@ -26,5 +26,6 @@ private:
     bool IsAlpha(const FString& Word) const;
     void EndGame(bool bGameWasWin);
     void InitGame();
-    void ShowRemainingLives() const;
+    void PrintRemainingLives() const;
+    void PrintBullsCows(const FString& Word) const;
 };

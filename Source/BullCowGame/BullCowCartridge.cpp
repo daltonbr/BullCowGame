@@ -1,6 +1,5 @@
 #include "BullCowCartridge.h"
 #include <unordered_set>
-#include <algorithm>
 
 //#define DEBUG_MODE
 
@@ -51,7 +50,8 @@ void UBullCowCartridge::OnInput(const FString& Input)
             EndGame(false);
             return;
         }
-        ShowRemainingLives();
+        PrintBullsCows(Input);
+        PrintRemainingLives();
     }
 }
 
@@ -75,7 +75,7 @@ void UBullCowCartridge::PrintGreeting() const
     // This is how we interpolate strings, but PrintLine make that easy for us
     //PrintLine(FString::Printf(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len()));
     PrintLine(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len());
-    ShowRemainingLives();
+    PrintRemainingLives();
 
 #ifdef DEBUG_MODE
     PrintLine(TEXT("[DEBUG] HiddenWord: %s"), *HiddenWord);
@@ -91,6 +91,7 @@ void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 lives)
     bGameOver = false;
 }
 
+// Check for repeating letters
 bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
     const TCHAR* Chars = *Word;
@@ -98,7 +99,7 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
 
     UsedChars.insert(Chars[0]);
 
-    for (uint16 i = 1; i < Word.Len(); ++i)
+    for (uint8 i = 1; i < Word.Len(); ++i)
     {
         std::unordered_set<TCHAR>::iterator it = UsedChars.find(Chars[i]);
 
@@ -109,7 +110,7 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
         }
         else
         {
-            // not found
+            // not found - we must keep looking
             UsedChars.insert(Chars[i]);
         }
     }
@@ -126,7 +127,7 @@ bool UBullCowCartridge::IsAlpha(const FString& Word) const
 {
     const TCHAR* Chars = *Word;
    
-    for (uint16 i = 0; i < Word.Len(); ++i)
+    for (uint8 i = 0; i < Word.Len(); ++i)
     {
         if (TChar<ANSICHAR>::IsAlpha(Chars[i]))
         {
@@ -141,7 +142,7 @@ bool UBullCowCartridge::IsAlpha(const FString& Word) const
     return true;
 }
 
-//TODO: we could optionally pass win or lose condition as a bool
+// Display End Game message (win or lose scenarios) according to bGameWasWin
 void UBullCowCartridge::EndGame(const bool bGameWasWin)
 {
     if (bGameWasWin)
@@ -157,7 +158,34 @@ void UBullCowCartridge::EndGame(const bool bGameWasWin)
     PrintLine(TEXT("Press <ENTER> to play again."));
 }
 
-void UBullCowCartridge::ShowRemainingLives() const
+void UBullCowCartridge::PrintRemainingLives() const
 {
     PrintLine(TEXT("Remaining lives: %i"), CurrentLives);
+}
+
+void UBullCowCartridge::PrintBullsCows(const FString& Word) const
+{
+    uint8 Bulls = 0;
+    uint8 Cows = 0;
+    const TCHAR* Chars = *Word;
+
+    for (uint8 i = 0; i < Word.Len(); ++i)
+    {
+        if (Chars[i] == HiddenWord[i])
+        {
+            ++Bulls;
+            continue;
+        }
+
+        for (uint8 j = 0; j < HiddenWord.Len(); j++)
+        {
+            if (Chars[i] == HiddenWord[j])
+            {
+                ++Cows;
+                break;
+            }
+        }
+    }
+
+    PrintLine(TEXT("[Bulls: %i | Cows: %i]"), Bulls, Cows);
 }
