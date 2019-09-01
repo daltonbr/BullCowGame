@@ -1,5 +1,7 @@
 #include "BullCowCartridge.h"
 
+//#define DEBUG_MODE
+
 void UBullCowCartridge::BeginPlay()
 {
     Super::BeginPlay();
@@ -9,10 +11,11 @@ void UBullCowCartridge::BeginPlay()
 // When the player hits enter
 void UBullCowCartridge::OnInput(const FString& Input)
 {
-    if (CurrentLives == 0)
+    if (bGameOver)
     {
         ClearScreen();
         InitGame();
+        return;
     }
 
     if (!HasCorrectLength(Input))
@@ -29,27 +32,19 @@ void UBullCowCartridge::OnInput(const FString& Input)
 
     if (Input.ToLower() == HiddenWord.ToLower())
     {
-        ShowWinMessage();
+        EndGame(true);
     }
     else
     {
         CurrentLives--;
         if (CurrentLives == 0)
         {
-            GameOver();
+            //TODO: Show HiddenWord?
+            EndGame(false);
+            return;
         }
         PrintLine(TEXT("Remaining lives: %i"), CurrentLives); 
     }
-
-    // Remove Life
-
-    // Check lives > 0
-        //if yes GuessAgain - show lives left
-        //if no show GameOver (and HiddenWord?)
-
-    //Prompt to PlayAgain, Press <ENTER> to play again
-    // Check user input
-    // PlayAgain or Quit
 }
 
 void UBullCowCartridge::InitGame()
@@ -74,8 +69,9 @@ void UBullCowCartridge::PrintGreeting() const
     PrintLine(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len());
     PrintLine(TEXT("Press <ENTER> to confirm your guess!"));
 
-    // DEBUG
+#ifdef DEBUG_MODE
     PrintLine(TEXT("[DEBUG] HiddenWord: %s"), *HiddenWord);
+#endif
 }
 
 void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 lives)
@@ -84,28 +80,32 @@ void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 lives)
     HiddenWord = hiddenWord;
     InitialLives = lives;
     CurrentLives = InitialLives;
-}
-
-void UBullCowCartridge::ShowWinMessage()
-{
-    PrintLine(TEXT("You Win!"));
-    PrintLine(TEXT("Press any key to play again"));
-    CurrentLives = 0;
-}
-
-void UBullCowCartridge::GameOver()
-{
-    PrintLine(TEXT("You Lose!"));
-    PrintLine(TEXT("Press any key to play again"));
+    bGameOver = false;
 }
 
 bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
-    //TODO
+    //TODO: IsIsogram not implemented yet
     return true;
 }
 
 bool UBullCowCartridge::HasCorrectLength(const FString& Word) const
 {
     return Word.Len() == HiddenWord.Len();
+}
+
+//TODO: we could optionally pass win or lose condition as a bool
+void UBullCowCartridge::EndGame(const bool bGameWasWin)
+{
+    if (bGameWasWin)
+    {
+        PrintLine(TEXT("You Win!"));
+    }
+    else
+    {
+        PrintLine(TEXT("You Lose!"));
+    }
+    bGameOver = true;
+    CurrentLives = 0;
+    PrintLine(TEXT("Press <ENTER> to play again."));
 }

@@ -17,12 +17,12 @@ private:
     FString HiddenWord;
     uint8 InitialLives;
     uint8 CurrentLives;
+    bool bGameOver;
 
     void PrintGreeting() const;
     void SetupGame(const FString HiddenWord, const uint8 lives);
-    void ShowWinMessage();
-    void GameOver();
     bool IsIsogram(const FString& Word) const;
     bool HasCorrectLength(const FString& Word) const;
+    void EndGame(bool bGameWasWin);
     void InitGame();
 };
