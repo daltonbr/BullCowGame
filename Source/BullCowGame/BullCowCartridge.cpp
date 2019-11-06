@@ -44,9 +44,8 @@ void UBullCowCartridge::OnInput(const FString& Input)
     else
     {
         --CurrentLives;
-        if (CurrentLives == 0)
+        if (CurrentLives <= 0)
         {
-            //TODO: Show HiddenWord?
             EndGame(false);
             return;
         }
@@ -72,8 +71,6 @@ void UBullCowCartridge::PrintGreeting() const
     PrintLine(TEXT("     /| o Oo O | oO |"));
     PrintLine(TEXT("    *|\\_o_Oo__/(    )"));
     PrintLine(TEXT("     |        | (oo)"));
-    // This is how we interpolate strings, but PrintLine make that easy for us
-    //PrintLine(FString::Printf(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len()));
     PrintLine(TEXT("Press <TAB> and guess the %i letter word!"), HiddenWord.Len());
     PrintRemainingLives();
 
@@ -101,7 +98,7 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
 
     for (uint8 i = 1; i < Word.Len(); ++i)
     {
-        std::unordered_set<TCHAR>::iterator it = UsedChars.find(Chars[i]);
+        std::unordered_set<TCHAR>::iterator It = UsedChars.find(Chars[i]);
 
         if (UsedChars.find(Chars[i]) != UsedChars.end())
         {
@@ -152,6 +149,7 @@ void UBullCowCartridge::EndGame(const bool bGameWasWin)
     else
     {
         PrintLine(TEXT("You Lose!"));
+        PrintLine(TEXT("\nThe hidden word was: %s"), *HiddenWord);
     }
     bGameOver = true;
     CurrentLives = 0;
