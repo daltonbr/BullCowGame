@@ -1,11 +1,13 @@
 #include "BullCowCartridge.h"
 #include <unordered_set>
+#include "BullCowGame/HiddenWordList.h"
 
 //#define DEBUG_MODE
 
 void UBullCowCartridge::BeginPlay()
 {
     Super::BeginPlay();
+    ValidWords = GetValidWords(GHiddenWords);
     InitGame();
 }
 
@@ -56,9 +58,15 @@ void UBullCowCartridge::OnInput(const FString& Input)
 
 void UBullCowCartridge::InitGame()
 {
-    //TODO: change this hardcoded words
-    SetupGame(TEXT("cake"), 4);
+    for (auto Index = 0; Index < ValidWords.Num(); Index++)
+    {
+        PrintLine(TEXT("%s"), *ValidWords[Index]);
+    }
+
+    SetupGame(ValidWords[0], 3);
     PrintGreeting();
+    PrintLine(TEXT("The number of possible words is %i"), GHiddenWords.Num());
+    PrintLine(TEXT("The number of valid words is %i"), ValidWords.Num());
 }
 
 void UBullCowCartridge::PrintGreeting() const
@@ -79,17 +87,32 @@ void UBullCowCartridge::PrintGreeting() const
 #endif
 }
 
-void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 lives)
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString> WordList) const
+{
+    TArray<FString> ValidWords;
+
+    for (auto Index = 0; Index < WordList.Num(); Index++)
+    {
+        const auto Length = GHiddenWords[Index].Len();
+        if (Length >= 4 && Length <= 8 && IsIsogram(WordList[Index]))
+        {
+            ValidWords.Emplace(GHiddenWords[Index]);
+        }
+    }
+    return ValidWords;
+}
+
+void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 Lives)
 {
     //TODO: check for isogram - word with non repeating letters  
     HiddenWord = hiddenWord;
-    InitialLives = lives;
+    InitialLives = Lives;
     CurrentLives = InitialLives;
     bGameOver = false;
 }
 
 // Check for repeating letters
-bool UBullCowCartridge::IsIsogram(const FString& Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word)
 {
     const TCHAR* Chars = *Word;
     auto UsedChars = std::unordered_set<TCHAR>();
@@ -120,7 +143,7 @@ bool UBullCowCartridge::HasCorrectLength(const FString& Word) const
 }
 
 // Checks if the FString is composed by only alphabetic (ANSICHAR) characters
-bool UBullCowCartridge::IsAlpha(const FString& Word) const
+bool UBullCowCartridge::IsAlpha(const FString& Word)
 {
     const TCHAR* Chars = *Word;
    
