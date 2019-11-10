@@ -87,16 +87,19 @@ void UBullCowCartridge::PrintGreeting() const
 #endif
 }
 
+// Filter words that have a certain length and also are valid isograms.
 TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString> WordList) const
 {
     TArray<FString> ValidWords;
 
-    for (auto Index = 0; Index < WordList.Num(); Index++)
+    for (FString Word : WordList)
     {
-        const auto Length = GHiddenWords[Index].Len();
-        if (Length >= 4 && Length <= 8 && IsIsogram(WordList[Index]))
+        const auto Length = Word.Len();
+        if (Length >= MinLengthHiddenWords &&
+            Length <= MaxLengthHiddenWords &&
+            IsIsogram(Word))
         {
-            ValidWords.Emplace(GHiddenWords[Index]);
+            ValidWords.Emplace(Word);
         }
     }
     return ValidWords;

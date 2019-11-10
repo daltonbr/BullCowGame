@@ -12,6 +12,8 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 public:
 	virtual void BeginPlay() override;
     virtual void OnInput(const FString& Input) override;
+    const uint8 MinLengthHiddenWords = 4;
+    const uint8 MaxLengthHiddenWords = 8;
 
 private:
     FString HiddenWord;
