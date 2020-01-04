@@ -4,6 +4,7 @@
 #include "Console/Cartridge.h"
 #include "BullCowCartridge.generated.h"
 
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 {
@@ -24,7 +25,7 @@ private:
 
     void PrintGreeting() const;
     TArray<FString> GetValidWords(TArray<FString> WordList) const;
-    void SetupGame(const FString HiddenWord, const uint8 Lives);
+    void SetupGame(const FString NewHiddenWord, const uint8 Lives);
     static bool IsIsogram(const FString& Word);
     bool HasCorrectLength(const FString& Word) const;
     static bool IsAlpha(const FString& Word);

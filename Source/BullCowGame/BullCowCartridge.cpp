@@ -1,5 +1,6 @@
 #include "BullCowCartridge.h"
-#include <unordered_set>
+#include "Containers/Array.h"
+#include "Containers/Set.h"
 #include "BullCowGame/HiddenWordList.h"
 
 //#define DEBUG_MODE
@@ -105,10 +106,9 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString> WordList)
     return ValidWords;
 }
 
-void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 Lives)
+void UBullCowCartridge::SetupGame(const FString NewHiddenWord, const uint8 Lives)
 {
-    //TODO: check for isogram - word with non repeating letters  
-    HiddenWord = hiddenWord;
+    HiddenWord = NewHiddenWord;
     InitialLives = Lives;
     CurrentLives = InitialLives;
     bGameOver = false;
@@ -118,23 +118,18 @@ void UBullCowCartridge::SetupGame(const FString hiddenWord, const uint8 Lives)
 bool UBullCowCartridge::IsIsogram(const FString& Word)
 {
     const TCHAR* Chars = *Word;
-    auto UsedChars = std::unordered_set<TCHAR>();
+    auto UsedChars = TSet<TCHAR>();    
 
-    UsedChars.insert(Chars[0]);
+    UsedChars.Add(Chars[0]);    
 
+    bool* bIsAlreadyInSetPtr = nullptr;
     for (uint8 i = 1; i < Word.Len(); ++i)
     {
-        std::unordered_set<TCHAR>::iterator It = UsedChars.find(Chars[i]);
+        UsedChars.Add(Chars[i], bIsAlreadyInSetPtr);
 
-        if (UsedChars.find(Chars[i]) != UsedChars.end())
-        {
-            // Found - not an isogram - repeating letters
+        if (bIsAlreadyInSetPtr)
+        {            
             return false;
-        }
-        else
-        {
-            // not found - we must keep looking
-            UsedChars.insert(Chars[i]);
         }
     }
     return true;
