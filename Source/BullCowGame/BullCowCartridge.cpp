@@ -1,6 +1,7 @@
+//#include "Containers/Array.h"
+//#include "Containers/Set.h"
+//#include "Math/UnrealMathUtility.h"
 #include "BullCowCartridge.h"
-#include "Containers/Array.h"
-#include "Containers/Set.h"
 #include "BullCowGame/HiddenWordList.h"
 
 //#define DEBUG_MODE
@@ -58,17 +59,10 @@ void UBullCowCartridge::OnInput(const FString& Input)
 }
 
 void UBullCowCartridge::InitGame()
-{
-    for (auto Index = 0; Index < ValidWords.Num(); Index++)
-    {
-        PrintLine(TEXT("%s"), *ValidWords[Index]);
-    }
-
-    //TODO: get a random word here
-    SetupGame(ValidWords[0], 5);
-    PrintGreeting();
-    PrintLine(TEXT("The number of possible words is %i"), GHiddenWords.Num());
-    PrintLine(TEXT("The number of valid words is %i"), ValidWords.Num());
+{    
+    const auto RandomIndex = FMath::RandRange(0, ValidWords.Num()-1);
+    SetupGame(ValidWords[RandomIndex]);
+    PrintGreeting();    
 }
 
 void UBullCowCartridge::PrintGreeting() const
@@ -107,10 +101,10 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     return ValidWords;
 }
 
-void UBullCowCartridge::SetupGame(const FString& NewHiddenWord, const uint8 Lives)
+void UBullCowCartridge::SetupGame(const FString& NewHiddenWord)
 {
     HiddenWord = NewHiddenWord;
-    InitialLives = Lives;
+    InitialLives = HiddenWord.Len() * 2;
     CurrentLives = InitialLives;
     bGameOver = false;
 }
@@ -180,13 +174,22 @@ void UBullCowCartridge::PrintRemainingLives() const
     PrintLine(TEXT("Remaining lives: %i"), CurrentLives);
 }
 
-void UBullCowCartridge::PrintBullsCows(const FString& Word) const
+void UBullCowCartridge::PrintBullsCows(const FString& Guess) const
+{
+    uint8 Bulls;
+    uint8 Cows;
+    GetBullCows(Guess, Bulls, Cows);
+
+    PrintLine(TEXT("[Bulls: %i | Cows: %i]"), Bulls, Cows);
+}
+
+void UBullCowCartridge::GetBullCows(const FString& Guess, uint8& OutBullCount, uint8& OutCowCount) const
 {
     uint8 Bulls = 0;
     uint8 Cows = 0;
-    const TCHAR* Chars = *Word;
+    const TCHAR* Chars = *Guess;
 
-    for (uint8 i = 0; i < Word.Len(); ++i)
+    for (uint8 i = 0; i < Guess.Len(); ++i)
     {
         if (Chars[i] == HiddenWord[i])
         {
@@ -203,6 +206,6 @@ void UBullCowCartridge::PrintBullsCows(const FString& Word) const
             }
         }
     }
-
-    PrintLine(TEXT("[Bulls: %i | Cows: %i]"), Bulls, Cows);
+    OutBullCount = Bulls;
+    OutCowCount = Cows;
 }

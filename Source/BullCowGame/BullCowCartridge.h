@@ -24,12 +24,13 @@ private:
 
     void PrintGreeting() const;
     TArray<FString> GetValidWords(const TArray<FString>& WordList) const;
-    void SetupGame(const FString& NewHiddenWord, const uint8 Lives);
+    void SetupGame(const FString& NewHiddenWord);
     static bool IsIsogram(const FString& Word);
     bool HasCorrectLength(const FString& Word) const;
     static bool IsAlpha(const FString& Word);
     void EndGame(bool bGameWasWin);
     void InitGame();
     void PrintRemainingLives() const;
-    void PrintBullsCows(const FString& Word) const;
+    void PrintBullsCows(const FString& Guess) const;
+    void GetBullCows(const FString& Guess, uint8& OutBullCount, uint8& OutCowCount) const;
 };
