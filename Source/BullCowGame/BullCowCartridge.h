@@ -4,7 +4,6 @@
 #include "Console/Cartridge.h"
 #include "BullCowCartridge.generated.h"
 
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 {
@@ -14,7 +13,7 @@ public:
 	virtual void BeginPlay() override;
     virtual void OnInput(const FString& Input) override;
     const uint8 MinLengthHiddenWords = 4;
-    const uint8 MaxLengthHiddenWords = 8;
+    const uint8 MaxLengthHiddenWords = 6;
 
 private:
     FString HiddenWord;
@@ -24,8 +23,8 @@ private:
     TArray<FString> ValidWords;
 
     void PrintGreeting() const;
-    TArray<FString> GetValidWords(TArray<FString> WordList) const;
-    void SetupGame(const FString NewHiddenWord, const uint8 Lives);
+    TArray<FString> GetValidWords(const TArray<FString>& WordList) const;
+    void SetupGame(const FString& NewHiddenWord, const uint8 Lives);
     static bool IsIsogram(const FString& Word);
     bool HasCorrectLength(const FString& Word) const;
     static bool IsAlpha(const FString& Word);

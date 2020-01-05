@@ -64,7 +64,8 @@ void UBullCowCartridge::InitGame()
         PrintLine(TEXT("%s"), *ValidWords[Index]);
     }
 
-    SetupGame(ValidWords[0], 3);
+    //TODO: get a random word here
+    SetupGame(ValidWords[0], 5);
     PrintGreeting();
     PrintLine(TEXT("The number of possible words is %i"), GHiddenWords.Num());
     PrintLine(TEXT("The number of valid words is %i"), ValidWords.Num());
@@ -89,7 +90,7 @@ void UBullCowCartridge::PrintGreeting() const
 }
 
 // Filter words that have a certain length and also are valid isograms.
-TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString> WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
 {
     TArray<FString> ValidWords;
 
@@ -106,7 +107,7 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString> WordList)
     return ValidWords;
 }
 
-void UBullCowCartridge::SetupGame(const FString NewHiddenWord, const uint8 Lives)
+void UBullCowCartridge::SetupGame(const FString& NewHiddenWord, const uint8 Lives)
 {
     HiddenWord = NewHiddenWord;
     InitialLives = Lives;
@@ -119,18 +120,15 @@ bool UBullCowCartridge::IsIsogram(const FString& Word)
 {
     const TCHAR* Chars = *Word;
     auto UsedChars = TSet<TCHAR>();    
-
     UsedChars.Add(Chars[0]);    
 
-    bool* bIsAlreadyInSetPtr = nullptr;
     for (uint8 i = 1; i < Word.Len(); ++i)
     {
-        UsedChars.Add(Chars[i], bIsAlreadyInSetPtr);
-
-        if (bIsAlreadyInSetPtr)
-        {            
+        if (UsedChars.Contains(Chars[i]))
+        {
             return false;
-        }
+        }           
+        UsedChars.Add(Chars[i]);
     }
     return true;
 }
